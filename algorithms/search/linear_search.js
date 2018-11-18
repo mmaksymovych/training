@@ -1,5 +1,3 @@
-
-
 const linear_search = (arr, number) => {
   let index;
 
@@ -10,7 +8,7 @@ const linear_search = (arr, number) => {
     }
   }
 
-  return index ? console.log(`number index - ${index}`) : console.log('number does not exist in array');
+  return index ? index : false;
 };
 
-linear_search([1,6,3,4,6], 6);
+module.exports = linear_search;

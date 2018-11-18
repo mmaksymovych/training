@@ -19,8 +19,7 @@ const bubble_sort = (array) => {
     }
   }
 
-  console.log(array);
+  return array;
 };
 
-
-bubble_sort([6,4,2,100,54,82,1,3,15,13]);
+module.exports = bubble_sort;
