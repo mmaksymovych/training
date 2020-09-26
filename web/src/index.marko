@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src=`http${input.secure ? 's' : '' }://localhost:${input.port}/scripts.js`></script>
+    <!-- blocking css that blocks rendering for 3 seconds because of fetching delay -->
+    <for|i| from=0 to=18>
+        <link rel="stylesheet" href=`http${input.secure ? 's' : '' }://localhost:${input.port}/styles?q=qa${i}z` />
+    </for>
+    <title>training</title>
+    <script>
+      function myFunction() {
+        var element = document.getElementById('title');
+        element.classList.add('test');
+      }
+    </script>
+  </head>
+  <body>
+    <h1 id="title" onclick="myFunction()">My First Heading</h1>
+    <p>My first paragraph.</p>
+  </body>
+</html>
