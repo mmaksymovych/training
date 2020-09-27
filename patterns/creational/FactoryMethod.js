@@ -1,7 +1,11 @@
+// A Factory Method creates new objects as instructed by the client.
+// One way to create objects in JavaScript is by invoking a constructor function with the new operator.
+// There are situations however, where the client does not, or should not, know which one of several candidate objects to instantiate.
+// The Factory Method allows the client to delegate object creation while still retaining control over which type to instantiate.
 
 const SOME_CLASS_TYPE = {
   TYPE_1: 'type1',
-  TYPE_2: 'type2'
+  TYPE_2: 'type2',
 };
 
 class SomeClass1 {
@@ -36,7 +40,7 @@ class SomeClassFactory {
   }
 
   getInstance(type) {
-    switch(type) {
+    switch (type) {
       case SOME_CLASS_TYPE.TYPE_1:
         this.instance = new SomeClass1();
         break;
