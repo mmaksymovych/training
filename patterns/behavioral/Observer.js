@@ -1,55 +1,38 @@
-function Click() {
-  this.handlers = []; // observers
+function Event() {
+  this.subscribers = [];
 }
 
-Click.prototype = {
-  subscribe: function (fn) {
-    this.handlers.push(fn);
+Event.prototype = {
+  subscribe: function (id, fn) {
+    this.subscribers.push([id, fn]);
   },
-
-  unsubscribe: function (fn) {
-    this.handlers = this.handlers.filter(function (item) {
-      if (item !== fn) {
-        return item;
-      }
-    });
+  unsubscribe: function (id) {
+    this.subscribers = this.subscribers.filter(([_id]) => _id !== id);
   },
-
-  fire: function (o, thisObj) {
-    var scope = thisObj || global;
-    this.handlers.forEach(function (item) {
-      item.call(scope, o);
-    });
+  startSale: function (event) {
+    this.subscribers.forEach(([_id, subscriber]) => subscriber(event));
   },
 };
 
-// log helper
-
-var log = (function () {
-  var log = '';
-
-  return {
-    add: function (msg) {
-      log += msg + '\n';
-    },
-    show: function () {
-      console.log(log);
-      log = '';
-    },
-  };
-})();
-
-var clickHandler = function (item) {
-  log.add('fired: ' + item);
+function Dealer(id, name) {
+  this.id = id;
+  this.name = name;
+}
+Dealer.prototype = {
+  startSale: function (event) {
+    console.log(`${this.name} start ticket sale for event ${event}!!!`);
+  },
 };
 
-var click = new Click();
+const ticketUA = new Dealer(1, 'Ticket UA');
+const karabas = new Dealer(2, 'Karabas');
 
-click.subscribe(clickHandler);
-click.fire('event #1');
-click.unsubscribe(clickHandler);
-click.fire('event #2');
-click.subscribe(clickHandler);
-click.fire('event #3');
+const ev = new Event();
+ev.subscribe(ticketUA.id, ticketUA.startSale.bind(ticketUA));
+ev.subscribe(karabas.id, karabas.startSale.bind(karabas));
 
-log.show();
+ev.startSale('IT Arena');
+
+ev.unsubscribe(karabas.id);
+
+ev.startSale('Lviv JS');

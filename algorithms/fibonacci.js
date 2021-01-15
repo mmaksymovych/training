@@ -1,17 +1,40 @@
+const fibonacci = (limit, prev = 1, current = 1) => {
+  current === 1 && console.log(current);
+  console.log(current);
 
+  const next = prev + b;
+  prev = b;
+  b = next;
 
-const fibonacci = (number, a=1, b=1) => {
-  b === 1 && console.log(b);
-  console.log(b);
+  if (b > limit) return;
 
-  const result  = a+b;
-    a=b;
-    b=result;
-
-    if(b>number) return;
-
-  fibonacci(number, a, b)
+  fibonacci(limit, prev, b);
 };
 
+function* generatorFibbonachi(n) {
+  let prev = 0;
+  let current = 1;
 
-fibonacci(55);
+  while (current < n) {
+    yield current;
+
+    const temp = prev + current;
+    prev = current;
+    current = temp;
+  }
+}
+
+//fibonacci(55);
+const gen = generatorFibbonachi(100);
+console.log(gen.next());
+console.log(gen.next());
+console.log(gen.next());
+console.log(gen.next());
+console.log(gen.next());
+console.log(gen.next());
+console.log(gen.next());
+console.log(gen.next());
+console.log(gen.next());
+console.log(gen.next());
+console.log(gen.next());
+console.log(gen.next());
