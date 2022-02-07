@@ -1,9 +1,10 @@
 class Node {
   value
-  connections = new Set()
+  connections
 
   constructor(value) {
     this.value = value
+    this.connections = new Set()
   }
 
   addConnection(value) {
@@ -22,10 +23,11 @@ const GRAPH_DIRECTION = {
 
 class Graph {
   direction
-  nodes = new Map()
+  nodes
 
   constructor(direction) {
     this.direction = direction
+    this.nodes = new Map()
   }
 
   addNode(value, connectionValue) {
@@ -67,4 +69,10 @@ graph.addNode(1, 2)
 graph.addNode(1, 3)
 graph.addNode(3, 1)
 
-graph.print()
+// graph.print()
+
+module.exports = {
+  Graph,
+  Node,
+  GRAPH_DIRECTION,
+}
