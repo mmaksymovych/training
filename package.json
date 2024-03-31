@@ -18,11 +18,14 @@
   "homepage": "https://github.com/mmaksymovych/training#readme",
   "dependencies": {
     "events": "^3.0.0",
-    "marko": "^4.23.4"
+    "marko": "^4.23.4",
+    "runge-kutta": "^0.0.1"
   },
   "devDependencies": {
     "eslint": "^7.17.0",
+    "eslint-plugin-jest": "^26.8.3",
     "jest": "^23.6.0",
     "prettier": "^2.2.1"
-  }
+  },
+  "type": "commonjs"
 }
