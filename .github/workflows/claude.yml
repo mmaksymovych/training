@@ -16,32 +16,49 @@ jobs:
       (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
       (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
       (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
+      (github.event_name == 'issues' && github.event.action == 'assigned' && github.event.assignee.login == 'claude-code[bot]') ||
       (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      pull-requests: read
-      issues: read
+      contents: write
+      pull-requests: write
+      issues: write
       id-token: write
       actions: read # Required for Claude to read CI results on PRs
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0  # Fetch full history for branch creation
 
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
           # This is an optional setting that allows Claude to read CI results on PRs
           additional_permissions: |
             actions: read
 
-          # Optional: Give a custom prompt to Claude. If this is not specified, Claude will perform the instructions specified in the comment that tagged it.
-          # prompt: 'Update the pull request description to include a summary of changes.'
+          # Custom prompt for assigned issues - create branch, fix issue, submit PR
+          prompt: |
+            ${{ github.event_name == 'issues' && github.event.action == 'assigned' && format('You have been assigned to issue #{0}: {1}
+
+            Please complete the following tasks:
+            1. Create a new branch from master named "fix/issue-{0}"
+            2. Analyze the issue and implement the required fix or feature
+            3. Test your changes to ensure they work correctly
+            4. Commit your changes with a clear commit message
+            5. Push the branch to the repository
+            6. Create a pull request to master with:
+               - Title: "Fix #{0}: {1}"
+               - Description: Summary of changes made and how they address the issue
+               - Link to the issue in the PR description
+
+            Issue details:
+            {2}', github.event.issue.number, github.event.issue.title, github.event.issue.body) || '' }}
 
           # Optional: Add claude_args to customize behavior and configuration
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
